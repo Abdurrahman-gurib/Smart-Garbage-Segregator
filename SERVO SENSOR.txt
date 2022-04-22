@@ -1,0 +1,51 @@
+#include <Servo.h>
+#define Trigpin 7
+#define Echopin 8
+#define high_led 13
+float distance;
+int duration;
+int ll = 700;
+Servo servo;
+void setup() {
+  pinMode (Trigpin, OUTPUT);
+  pinMode (high_led, OUTPUT);
+  pinMode (Echopin, INPUT);
+  Serial.begin(9600);
+  Serial.println ("Welcome To Distance Meter");
+  digitalWrite (high_led, LOW);
+  servo.attach(9);
+servo.write(45);  
+}
+
+void loop() {
+  digitalWrite(Trigpin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(Trigpin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(Trigpin, LOW);
+  duration = pulseIn(Echopin, HIGH);
+  distance = duration * 0.034 / 2;
+  delay (ll);
+  Serial.println (" ");
+  Serial.print ("Distance = ");
+  Serial.print (distance);
+  Serial.print (" CM");
+  Serial.println (" ");
+
+  if (distance>=10)
+  {
+    Serial.println ("Nobody Is Infront Of the Sensor");
+  digitalWrite (high_led, LOW);
+  }
+  else 
+  {
+    Serial.println ("Someone Is Infront Of the Sensor");
+     digitalWrite (high_led, HIGH);
+    delay (2000);
+       servo.write(125);
+        delay(2000);
+        servo.write(45);
+        delay(2000);
+   
+  }
+}
